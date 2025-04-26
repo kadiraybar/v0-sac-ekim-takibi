@@ -38,6 +38,24 @@ export async function getPatientById(id: number) {
   }
 }
 
+export async function getPatientsBySearchTerm(term: string) {
+  try {
+    const result = await sql`
+      SELECT * FROM patients 
+      WHERE 
+        first_name ILIKE ${"%" + term + "%"} OR 
+        last_name ILIKE ${"%" + term + "%"} OR 
+        phone LIKE ${"%" + term + "%"}
+      ORDER BY created_at DESC
+      LIMIT 10
+    `
+    return result
+  } catch (error) {
+    console.error("Error in getPatientsBySearchTerm:", error)
+    throw error
+  }
+}
+
 export async function createPatient(patient: {
   first_name: string
   last_name: string
@@ -97,6 +115,28 @@ export async function updatePatient(
     return result.rows[0]
   } catch (error) {
     console.error("Error in updatePatient:", error)
+    throw error
+  }
+}
+
+export async function deletePatient(id: number) {
+  try {
+    // Önce hastaya ait randevuları sil
+    await sql`
+      DELETE FROM appointments 
+      WHERE patient_id = ${id}
+    `
+
+    // Sonra hastayı sil
+    const result = await sql`
+      DELETE FROM patients 
+      WHERE id = ${id}
+      RETURNING id
+    `
+
+    return result.length > 0
+  } catch (error) {
+    console.error("Error in deletePatient:", error)
     throw error
   }
 }
@@ -176,7 +216,7 @@ export async function getAppointments(filters?: {
       params.push(filters.doctor_id)
     }
 
-    query += ` ORDER BY a.date`
+    query += ` ORDER BY a.date DESC`
 
     // Sorguyu çalıştır
     const result = await sql.query(query, params)

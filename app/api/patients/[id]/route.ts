@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { getPatientById, updatePatient } from "@/lib/db"
+import { getPatientById, updatePatient, deletePatient } from "@/lib/db"
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {
@@ -39,5 +39,25 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   } catch (error) {
     console.error("Error updating patient:", error)
     return NextResponse.json({ error: "Failed to update patient" }, { status: 500 })
+  }
+}
+
+export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+  try {
+    const id = Number.parseInt(params.id)
+    if (isNaN(id)) {
+      return NextResponse.json({ error: "Invalid ID" }, { status: 400 })
+    }
+
+    const result = await deletePatient(id)
+
+    if (!result) {
+      return NextResponse.json({ error: "Patient not found or could not be deleted" }, { status: 404 })
+    }
+
+    return NextResponse.json({ success: true, message: "Patient deleted successfully" })
+  } catch (error) {
+    console.error("Error deleting patient:", error)
+    return NextResponse.json({ error: "Failed to delete patient" }, { status: 500 })
   }
 }
