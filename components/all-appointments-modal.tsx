@@ -220,7 +220,7 @@ export function AllAppointmentsModal({ open, onOpenChange }: AllAppointmentsModa
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden flex flex-col">
+      <DialogContent className="max-w-4xl max-h-[90vh] h-[90vh] sm:max-h-[80vh] sm:h-auto overflow-hidden flex flex-col">
         <DialogHeader>
           <DialogTitle className="text-xl flex items-center">
             <CalendarClock className="mr-2 h-5 w-5" />
@@ -230,8 +230,8 @@ export function AllAppointmentsModal({ open, onOpenChange }: AllAppointmentsModa
 
         <div className="flex flex-col space-y-4 overflow-hidden">
           {/* Filters */}
-          <div className="flex flex-wrap gap-3 items-center">
-            <div className="relative flex-1 min-w-[240px]">
+          <div className="flex flex-col sm:flex-row flex-wrap gap-3 items-start">
+            <div className="relative flex-1 min-w-[240px] w-full">
               <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Hasta adı veya telefon ara..."
@@ -241,8 +241,8 @@ export function AllAppointmentsModal({ open, onOpenChange }: AllAppointmentsModa
               />
             </div>
 
-            <div className="flex flex-wrap gap-3">
-              <div className="space-y-1 min-w-[140px]">
+            <div className="flex flex-wrap gap-3 w-full sm:w-auto">
+              <div className="space-y-1 min-w-[140px] flex-1 sm:flex-auto">
                 <Label htmlFor="status-filter" className="text-xs">
                   Durum
                 </Label>
@@ -258,7 +258,7 @@ export function AllAppointmentsModal({ open, onOpenChange }: AllAppointmentsModa
                 </Select>
               </div>
 
-              <div className="space-y-1 min-w-[140px]">
+              <div className="space-y-1 min-w-[140px] flex-1 sm:flex-auto">
                 <Label htmlFor="type-filter" className="text-xs">
                   İşlem Türü
                 </Label>
@@ -276,7 +276,7 @@ export function AllAppointmentsModal({ open, onOpenChange }: AllAppointmentsModa
                 </Select>
               </div>
 
-              <div className="space-y-1 min-w-[140px]">
+              <div className="space-y-1 min-w-[140px] flex-1 sm:flex-auto">
                 <Label htmlFor="sort-order" className="text-xs">
                   Sıralama
                 </Label>
@@ -294,7 +294,7 @@ export function AllAppointmentsModal({ open, onOpenChange }: AllAppointmentsModa
           </div>
 
           {/* Appointments List */}
-          <div className="overflow-y-auto pr-2">
+          <div className="overflow-y-auto pr-2 flex-1">
             <div className="grid gap-3">
               {filteredAppointments.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground">
